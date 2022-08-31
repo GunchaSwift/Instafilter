@@ -15,3 +15,18 @@ Because of the way SwiftUI sends binding updates, we must use .onChange() modifi
     print("New value is \(newValue)")
 }
 ```
+
+***Showing multiple options with confirmationDialog().***
+
+This .confirmationDialog() differs from alert(), because it slides from bottom, can contain multiple buttons and can be dismissed by tapping outside the options. The way they are created, however, is almost identical.
+```
+.confirmationDialog("Change background", isPresented: $showingConfirmation) {
+     Button("Red") { backgroundColor = .red }
+     Button("Green") { backgroundColor = .green }
+     Button("Blue") { backgroundColor = .blue }
+     Button("Cancel", role: .cancel) { }
+} message: {
+     Text("Select a new color")
+}
+```
+
