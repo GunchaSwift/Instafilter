@@ -30,3 +30,21 @@ This .confirmationDialog() differs from alert(), because it slides from bottom, 
 }
 ```
 
+### **Day 63 of #100DaysOfSwiftUI**
+
+***Integrating Core Image with SwiftUI***
+
+CoreImage is builtin SwiftUI framework used to manipulate images - apply blurs, filters and so on. To get meaningful results out of CoreImage, we must know 4 types of images:
+
+1. SwiftUI Image - used to represent the image in SwiftUI;
+2. UIImage - UIKit image, powerful;
+3. CGImage - CoreGraphics, two dimensional array of pixels;
+4. CIImage - CoreImage, stores information about the image, like "image recipe".
+
+Interoperability of these image types:
+
+UIImage <-> CGImage
+
+UIImage -> CIImage <-> CGImage
+
+CGImage -> SwiftUI Image <-> UIImage
