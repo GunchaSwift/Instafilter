@@ -48,3 +48,13 @@ UIImage <-> CGImage
 UIImage -> CIImage <-> CGImage
 
 CGImage -> SwiftUI Image <-> UIImage
+
+***Wrapping a UIViewController in a SwiftUI view***
+
+Important note about UIKit:
+
+1. UIView - parent class of all views;
+2. UIViewController - brings views to life;
+3. Delegation - decides where work happens.
+
+To wrap UIViewController in a SwiftUI view, we must create a structure that conforms to UIViewControllerRepresentable protocol. To do so, structure must have two functions - makeUIViewController and updateUIViewcontroller.
