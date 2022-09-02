@@ -58,3 +58,50 @@ Important note about UIKit:
 3. Delegation - decides where work happens.
 
 To wrap UIViewController in a SwiftUI view, we must create a structure that conforms to UIViewControllerRepresentable protocol. To do so, structure must have two functions - makeUIViewController and updateUIViewcontroller.
+
+### **Day 64 of #100DaysOfSwiftUI**
+
+***Using coordinators to manage SwiftUI view controllers***
+
+On Day 63 we managed to display PHPickerViewController, but we were not able to select photos or cancel the VC. Thus, we must use coordinators, which act like delegates for UIKit ViewControllers. Delegates are objects that respond to events occuring elsewhere.
+
+How to add coordinators:
+
+1. Create Coordinator class and make sure it is capable of acting like a delegate.
+```
+class Coordinator: NSObject, PHPickerViewControllerDelegate { }
+```
+2. Make the coordinator.
+```
+func makeCoordinator() -> Coordinator {
+    Coordinator()
+```
+3. Ask PHPickerViewController to tell our coordinator when something happens.
+```
+picker.delegate = Context.coordinator
+```
+4. Now we can finally make sure that our coordinator conforms to PHPickerViewControllerDelegate by giving it didFinishPicking function.
+```
+func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+    // Tell picker to dismiss
+    picker.dismiss(animated: true)
+    
+    // Exit if no selection was made
+    guard let provider = results.first?.itemProvider else { return }
+    
+    // If this has an image, use it
+    if provider.canLoadObject(ofClass: UIImage.self) {
+        provider.loadObject(ofClass: UIImage.self) { image, error in
+            self.parent.image = image as? UIImage
+        }
+    }
+}
+```
+
+***Complete process summed up:***
+
+1. We create a SwiftUI view that conforms to UIViewControllerRepresentable.
+2. We give it a makeUIViewController() method that creates some sort of ViewController, for example, PHPickerViewController.
+3. Add nested class for Coordinator to act as a bridge between UIKIt VC and SwiftUI view.
+4. Give Coordinator didFinishPicking method, which is triggered when image is selected.
+5. Add @Binding property to our ImagePicker, so it can send changesback to its parent view.
