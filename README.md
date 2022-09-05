@@ -105,3 +105,38 @@ func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPicke
 3. Add nested class for Coordinator to act as a bridge between UIKIt VC and SwiftUI view.
 4. Give Coordinator didFinishPicking method, which is triggered when image is selected.
 5. Add @Binding property to our ImagePicker, so it can send changesback to its parent view.
+
+***How to save images to the user's photo library***
+
+First, configuration must be made. This can be done through ProjectName/TARGETS/Info/Right_click_on_any_attribute_+_add_row/"Privacy - Photo library additions usage description." For value - text to display.
+
+UIImageWriteToSavedPhotosAlbum(1*, 2*, 3*, 4*)
+
+1* - Image to save;
+
+2* - Object that should be notified about the result of the save;
+
+3* - Method on that object that should be run.
+
+4* - We can provide any sort of data and it will be passed back to us when our completion method is called.
+
+To write an image to photo library and read the response, we need some sort of class, which is inheriting from NSObject. Inside the class we need following code:
+```
+class ImageSaver: NSObject {
+    // Function to save image, 1*
+    func writeToPhotoAlbum(image: UIImage) {
+        UIImageWriteToSavedPhotosAlbum(image, self, #selector(saveCompleted), nil)
+    }
+    
+    // Function to read the response, 2*
+    @objc func saveCompleted(_ image: UIImage, didFinishSavingWithError error: Error?, contextInfo: UnsafeRawPointer) {
+        print("Save finished!")
+    }
+}
+```
+
+1* - #selector is a special compiler directive, which asks swift to make sure the method name exists where we say it does. Some Objective-c APIs accept methods or properties as parameters, then uses those names to dynamically call or access them. Thus, in swift we must use #selector to represent these methods or properties.
+
+2* - @objc attribute to method tells swift to generate code that can be read by Objective-c.
+
+
